@@ -9,12 +9,13 @@ module Searchable
 
     index_name "pig-search"
 
+    # TODO: make callbacks async
     after_commit on: [:create] do
-      delay.perform_document_index
+      perform_document_index
     end
 
     after_commit on: [:update] do
-      delay.update_document_index
+      update_document_index
     end
 
     after_commit on: [:destroy] do
@@ -33,11 +34,17 @@ module Searchable
   end
 
   def as_indexed_json(options={})
-    as_json.merge({search_title: search_title})
+    as_json.merge({search_title: search_title, result_path: result_path})
   end
 
   private
   def search_title
     (try(:title) || try(:name) || try(:description))
+  end
+
+  # TODO: prompt developers to override this method when concern included in
+  # non-content package model
+  def result_path
+    Pig::Engine.routes.url_helpers.content_package_path(self)
   end
 end
