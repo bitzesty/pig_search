@@ -9,7 +9,6 @@ module Searchable
 
     index_name "pig-search"
 
-    # TODO: make callbacks async
     after_commit on: [:create] do
       perform_document_index
     end
@@ -19,18 +18,17 @@ module Searchable
     end
 
     after_commit on: [:destroy] do
-      __elasticsearch__.delete_document if self.published?
+      __elasticsearch__.delete_document
     end
   end
 
-  # Override this method on non-pig models that don't respond to 'published?'
   def perform_document_index
-    __elasticsearch__.index_document if self.published?
+    # only index publishable objects if they are published
+    __elasticsearch__.index_document if (!self.respond_to?(:published) || self.published?)
   end
 
-  # Override this method on non-pig models that don't respond to 'published?'
   def update_document_index
-    __elasticsearch__.update_document if self.published?
+    __elasticsearch__.update_document if (!self.respond_to?(:published) || self.published?)
   end
 
   def as_indexed_json(options={})
