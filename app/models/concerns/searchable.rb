@@ -34,17 +34,24 @@ module Searchable
   end
 
   def as_indexed_json(options={})
-    as_json.merge({search_title: search_title, result_path: result_path})
+    as_json.merge({result_title: result_title, result_path: result_path,
+                   result_tags: result_tags})
   end
 
   private
-  def search_title
-    (try(:title) || try(:name) || try(:description))
+
+  def result_title
+    raise NoMethodError.new("Override this method to return the title of your
+                            object in search results")
   end
 
-  # TODO: prompt developers to override this method when concern included in
-  # non-content package model
   def result_path
-    Pig::Engine.routes.url_helpers.content_package_path(self)
+    raise NoMethodError.new("Override this method to return the path to your
+                            object in search results")
+  end
+
+  # Optional: Override to return array of tag strings if object is taggable
+  def result_tags
+    ""
   end
 end
