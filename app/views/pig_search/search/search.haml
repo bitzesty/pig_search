@@ -1,0 +1,11 @@
+%div.pig_search__container
+  %h1 Search
+
+  =form_tag(root_path, method: "get", class: "pig_search__form") do
+    =label_tag(:query, "Search for:")
+    =text_field_tag(:query)
+    =submit_tag("Search")
+
+  %div.pig_search__results
+    -@results.each do |result|
+      %p=link_to result.result_title, result.result_path
