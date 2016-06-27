@@ -39,3 +39,8 @@ def result_tags
   taxonomy.collect(&:name)
 end
 ```
+
+## Deploy
+Ensure you have set the env variable `ELASTICSEARCH_URL` to the url of your elasticsearch installation.
+
+On Heroku this url can be found on the settings page of the add-on you have chosen for Elasticsearch.
