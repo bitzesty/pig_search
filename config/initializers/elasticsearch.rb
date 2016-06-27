@@ -1,3 +1,5 @@
+require 'elasticsearch/model'
+
 config = {
   host: ENV["ELASTICSEARCH_URL"] 
 }
