@@ -10,11 +10,18 @@
     %div #{pluralize(@results.count, "result")} in total
 
     %div.pig_search__tags
-      %h3 Filter by type
+      %h3 Filter by category
       -@tags.each do |tag|
         %p{class: ("active" if tag[0] == params[:filter])}
           = link_to("#{tag[0]} (#{tag[1]})",
           root_path(query: params[:query], filter: tag[0]))
+
+    %div.pig_search__order
+      %h3 Order results
+      = link_to("Date", root_path(query: params[:query],
+        filter: params[:filter], date: ((params[:date] == "asc") ? "desc" : "asc")))
+      = link_to("Relevance", root_path(query: params[:query],
+        filter: params[:filter], date: nil))
 
     %div.pig_search__results
       -@results.each do |result|
