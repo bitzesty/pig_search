@@ -2,10 +2,23 @@
   %h1 Search
 
   =form_tag(root_path, method: "get", class: "pig_search__form") do
-    =label_tag(:query, "Search for:")
-    =text_field_tag(:query)
+    =text_field_tag(:query, params[:query])
     =submit_tag("Search")
 
-  %div.pig_search__results
-    -@results.each do |result|
-      %p=link_to result.result_title, result.result_path
+  -if @results.any?
+    %h2 Search results for '#{params[:query]}'
+    %div #{pluralize(@results.count, "result")} in total
+
+    %div.pig_search__tags
+      %h3 Filter by type
+      -@tags.each do |tag|
+        %p{class: ("active" if tag[0] == params[:filter])}
+          = link_to("#{tag[0]} (#{tag[1]})",
+          root_path(query: params[:query], filter: tag[0]))
+
+    %div.pig_search__results
+      -@results.each do |result|
+        %div.pig_search__result
+          %p=link_to result.result_title, result.result_path
+          - if result.updated_at
+            %small= "Updated #{l DateTime.parse(result.updated_at)}"
