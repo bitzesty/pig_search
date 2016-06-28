@@ -1,5 +1,5 @@
 module PigSearch
-  class SearchController < ApplicationController
+  class SearchController < ::ApplicationController
     def search
       @results = Elasticsearch::Model.search(search_params[:query]).results
     end
