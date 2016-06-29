@@ -25,7 +25,7 @@ module PigSearch
       json = {
         "query" => {
           "match" => {
-            "_all" => query
+            "_all" => (query || "")
           }
         },
       }
