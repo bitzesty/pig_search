@@ -2,6 +2,7 @@
   %h1 Search
 
   =form_tag(root_path, method: "get", class: "pig_search__form") do
+    =label_tag(:query, 'Search')
     =text_field_tag(:query, params[:query])
     =submit_tag("Search")
 
