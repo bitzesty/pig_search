@@ -7,7 +7,7 @@ module Searchable
   included do
     include Elasticsearch::Model
 
-    index_name "pig-search"
+    index_name "#{Searchable.search_index_name}"
 
     after_commit on: [:create] do
       perform_document_index
@@ -18,7 +18,7 @@ module Searchable
     end
 
     after_commit on: [:destroy] do
-      __elasticsearch__.delete_document
+      delete_document_index
     end
   end
 
@@ -29,6 +29,10 @@ module Searchable
 
   def update_document_index
     __elasticsearch__.update_document if (!self.respond_to?(:published) || self.published?)
+  end
+
+  def delete_document_index
+    __elasticsearch__.delete_document
   end
 
   def as_indexed_json(options={})
@@ -51,5 +55,13 @@ module Searchable
   # Optional: Override to return array of tag strings if object is taggable
   def result_tags
     ""
+  end
+
+  def self.search_index_name
+    if Rails.env.test?
+      "test-pig-search"
+    else
+      "pig-search"
+    end
   end
 end
