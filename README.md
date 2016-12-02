@@ -39,6 +39,7 @@ def result_tags
   taxonomy.collect(&:name)
 end
 ```
+By default the concern will only index models that respond `true` to calls to `published?`. For simplicity you might want to add this method and always return true, alternatively you can override `perform_document_index` and `update_document_index` with your own indexing logic.
 
 ## Deploy
 Ensure you have set the env variable `ELASTICSEARCH_URL` to the url of your elasticsearch installation.
