@@ -24,11 +24,15 @@ module Searchable
 
   def perform_document_index
     # only index publishable objects if they are published
-    __elasticsearch__.index_document if (!self.respond_to?(:published) || self.published?)
+    __elasticsearch__.index_document if !!self.try(:published?)
   end
 
   def update_document_index
-    __elasticsearch__.update_document if (!self.respond_to?(:published) || self.published?)
+    if !!self.try(:published?)
+      __elasticsearch__.index_document
+    else
+      __elasticsearch__.delete_document
+    end
   end
 
   def delete_document_index
