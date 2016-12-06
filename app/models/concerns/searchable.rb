@@ -33,6 +33,8 @@ module Searchable
     else
       __elasticsearch__.delete_document
     end
+    # rescue elasticsearch not found, not an issue since we are deleting
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound
   end
 
   def delete_document_index
