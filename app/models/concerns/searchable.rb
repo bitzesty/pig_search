@@ -39,6 +39,8 @@ module Searchable
 
   def delete_document_index
     __elasticsearch__.delete_document
+    # rescue elasticsearch not found, not an issue since we are deleting
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound
   end
 
   def as_indexed_json(options={})
